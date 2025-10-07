@@ -11,7 +11,7 @@ using ProjetoFinalMinimalAPI.Infraestrutura.Db;
 namespace projeto_final_minimal_api.Migrations
 {
     [DbContext(typeof(DbContexto))]
-    [Migration("20251007145248_AdministradorMigration")]
+    [Migration("20251007194116_AdministradorMigration")]
     partial class AdministradorMigration
     {
         /// <inheritdoc />
@@ -49,7 +49,16 @@ namespace projeto_final_minimal_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Admnistradores");
+                    b.ToTable("Administradores");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "administrador@email.com",
+                            Perfil = "ADM",
+                            Senha = "123456"
+                        });
                 });
 #pragma warning restore 612, 618
         }

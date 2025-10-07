@@ -12,7 +12,20 @@ public class DbContexto : DbContext
         _configuracaoAppSetting = configuracaoAppSetting;
     }
 
-    public DbSet<Administrador> Admnistradores { get; set; } = default!;
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Administrador>().HasData(
+            new Administrador
+            {
+                Id = 1,
+                Email = "administrador@email.com",
+                Senha = "123456",
+                Perfil = "ADM"
+            }
+        );
+    }
+
+    public DbSet<Administrador> Administradores { get; set; } = default!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

@@ -46,7 +46,16 @@ namespace projeto_final_minimal_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Admnistradores");
+                    b.ToTable("Administradores");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "administrador@email.com",
+                            Perfil = "ADM",
+                            Senha = "123456"
+                        });
                 });
 #pragma warning restore 612, 618
         }

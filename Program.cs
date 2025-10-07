@@ -1,8 +1,13 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using projeto_final_minimal_api.Dominio.Interfaces;
+using projeto_final_minimal_api.Dominio.Servicos;
 using ProjetoFinalMinimalAPI.Dominio.DTOs;
 using ProjetoFinalMinimalAPI.Infraestrutura.Db;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IAdministradorService, AdministradorServico>();
 
 builder.Services.AddDbContext<DbContexto>(options =>
 {
@@ -17,9 +22,9 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapPost("/login", (LoginDTO loginDTO) =>
+app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdministradorService administradorService) =>
 {
-    if (loginDTO.Email == "adm@teste.com" && loginDTO.Senha == "123456")
+    if (administradorService.Login(loginDTO) != null)
     {
         return Results.Ok("Login efetuado com sucesso!");
     }

@@ -15,7 +15,7 @@ namespace projeto_final_minimal_api.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Admnistradores",
+                name: "Administradores",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -29,16 +29,21 @@ namespace projeto_final_minimal_api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Admnistradores", x => x.Id);
+                    table.PrimaryKey("PK_Administradores", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.InsertData(
+                table: "Administradores",
+                columns: new[] { "Id", "Email", "Perfil", "Senha" },
+                values: new object[] { 1, "administrador@email.com", "ADM", "123456" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Admnistradores");
+                name: "Administradores");
         }
     }
 }
