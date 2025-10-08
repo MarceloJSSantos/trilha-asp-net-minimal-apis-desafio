@@ -1,6 +1,6 @@
 using ProjetoFinalMinimalAPI.Dominio.Entidades;
 
-namespace projeto_final_minimal_api.Dominio.Interfaces
+namespace ProjetoFinalMinimalAPI.Dominio.Interfaces
 {
     public interface IVeiculoService
     {

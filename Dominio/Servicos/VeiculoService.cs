@@ -1,5 +1,5 @@
 using ProjetoFinalMinimalAPI.Dominio.Entidades;
-using projeto_final_minimal_api.Dominio.Interfaces;
+using ProjetoFinalMinimalAPI.Dominio.Interfaces;
 using ProjetoFinalMinimalAPI.Infraestrutura.Db;
 
 namespace ProjetoFinalMinimalAPI.Dominio.Servicos
