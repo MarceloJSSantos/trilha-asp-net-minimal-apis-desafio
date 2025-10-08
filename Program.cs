@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using projeto_final_minimal_api.Dominio.DTOs;
 using projeto_final_minimal_api.Dominio.Interfaces;
+using projeto_final_minimal_api.Dominio.ModelViews;
 using projeto_final_minimal_api.Dominio.Servicos;
 using ProjetoFinalMinimalAPI.Dominio.DTOs;
 using ProjetoFinalMinimalAPI.Dominio.Entidades;
@@ -49,8 +50,34 @@ app.MapPost("/administradores/login", ([FromBody] LoginDTO loginDTO, IAdministra
 #endregion
 
 #region Veículos
+
+
+ErrosDeValidacao validaDTO(VeiculoDTO veiculoDTO)
+{
+    var validacoes = new ErrosDeValidacao
+    {
+        Mensagens = new List<string>()
+    };
+
+    if (string.IsNullOrEmpty(veiculoDTO.Marca))
+        validacoes.Mensagens.Add("A marca não pode ser null ou vazia!");
+
+    if (string.IsNullOrEmpty(veiculoDTO.Modelo))
+        validacoes.Mensagens.Add("O modelo não pode ser null ou vazia!");
+
+    if (veiculoDTO.Ano < 1950)
+        validacoes.Mensagens.Add("O ano deve ser maior que 1950!");
+
+    return validacoes;
+}
+
 app.MapPost("/veiculos", ([FromBody] VeiculoDTO veiculoDTO, IVeiculoService veiculoService) =>
 {
+    var validacoes = validaDTO(veiculoDTO);
+
+    if (validacoes.Mensagens.Count > 0)
+        return Results.BadRequest(validacoes);
+
     var veiculo = new Veiculo
     {
         Marca = veiculoDTO.Marca,
@@ -60,6 +87,7 @@ app.MapPost("/veiculos", ([FromBody] VeiculoDTO veiculoDTO, IVeiculoService veic
     veiculoService.Incluir(veiculo);
 
     return Results.Created($"/veiculo/{veiculo.Id}", veiculo);
+
 }).WithTags("Veículos");
 
 app.MapGet("/veiculos", ([FromQuery] int? pagina, IVeiculoService veiculoService) =>
@@ -85,6 +113,11 @@ app.MapPut("/veiculos/{id}", ([FromRoute] int id, VeiculoDTO veiculoDTO, IVeicul
 
     if (veiculo == null)
         return Results.NotFound();
+
+    var validacoes = validaDTO(veiculoDTO);
+
+    if (validacoes.Mensagens.Count > 0)
+        return Results.BadRequest(validacoes);
 
     veiculo.Marca = veiculoDTO.Marca;
     veiculo.Modelo = veiculoDTO.Modelo;
