@@ -13,6 +13,7 @@ namespace projeto_final_minimal_api.Dominio.Servicos
     public class AdministradorServico : IAdministradorService
     {
         private readonly DbContexto _contexto;
+
         public AdministradorServico(DbContexto db)
         {
             _contexto = db;

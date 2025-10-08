@@ -3,11 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using projeto_final_minimal_api.Dominio.Interfaces;
 using projeto_final_minimal_api.Dominio.Servicos;
 using ProjetoFinalMinimalAPI.Dominio.DTOs;
+using ProjetoFinalMinimalAPI.Dominio.ModelViews;
 using ProjetoFinalMinimalAPI.Infraestrutura.Db;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IAdministradorService, AdministradorServico>();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DbContexto>(options =>
 {
@@ -20,7 +24,7 @@ builder.Services.AddDbContext<DbContexto>(options =>
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => Results.Json(new Home()));
 
 app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdministradorService administradorService) =>
 {
@@ -33,5 +37,8 @@ app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdministradorService admin
         return Results.Unauthorized();
     }
 });
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.Run();
