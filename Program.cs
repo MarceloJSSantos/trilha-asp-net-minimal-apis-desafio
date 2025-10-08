@@ -1,14 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using projeto_final_minimal_api.Dominio.DTOs;
 using projeto_final_minimal_api.Dominio.Interfaces;
 using projeto_final_minimal_api.Dominio.Servicos;
 using ProjetoFinalMinimalAPI.Dominio.DTOs;
+using ProjetoFinalMinimalAPI.Dominio.Entidades;
 using ProjetoFinalMinimalAPI.Dominio.ModelViews;
+using ProjetoFinalMinimalAPI.Dominio.Servicos;
 using ProjetoFinalMinimalAPI.Infraestrutura.Db;
 
+#region Builder
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IAdministradorService, AdministradorServico>();
+builder.Services.AddScoped<IVeiculoService, VeiculoService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,10 +28,14 @@ builder.Services.AddDbContext<DbContexto>(options =>
 );
 
 var app = builder.Build();
+#endregion
 
-app.MapGet("/", () => Results.Json(new Home()));
+#region Home
+app.MapGet("/", () => Results.Json(new Home())).WithTags("Home");
+#endregion
 
-app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdministradorService administradorService) =>
+#region Administradores
+app.MapPost("/administradores/login", ([FromBody] LoginDTO loginDTO, IAdministradorService administradorService) =>
 {
     if (administradorService.Login(loginDTO) != null)
     {
@@ -36,9 +45,71 @@ app.MapPost("/login", ([FromBody] LoginDTO loginDTO, IAdministradorService admin
     {
         return Results.Unauthorized();
     }
-});
+}).WithTags("Administradores");
+#endregion
 
+#region Veículos
+app.MapPost("/veiculos", ([FromBody] VeiculoDTO veiculoDTO, IVeiculoService veiculoService) =>
+{
+    var veiculo = new Veiculo
+    {
+        Marca = veiculoDTO.Marca,
+        Modelo = veiculoDTO.Modelo,
+        Ano = veiculoDTO.Ano
+    };
+    veiculoService.Incluir(veiculo);
+
+    return Results.Created($"/veiculo/{veiculo.Id}", veiculo);
+}).WithTags("Veículos");
+
+app.MapGet("/veiculos", ([FromQuery] int? pagina, IVeiculoService veiculoService) =>
+{
+    var listaVeiculos = veiculoService.ListaTodos(pagina);
+
+    return Results.Ok(listaVeiculos);
+}).WithTags("Veículos");
+
+app.MapGet("/veiculos/{id}", ([FromRoute] int id, IVeiculoService veiculoService) =>
+{
+    var veiculo = veiculoService.BuscaPorId(id);
+
+    if (veiculo == null)
+        return Results.NotFound();
+
+    return Results.Ok(veiculo);
+}).WithTags("Veículos");
+
+app.MapPut("/veiculos/{id}", ([FromRoute] int id, VeiculoDTO veiculoDTO, IVeiculoService veiculoService) =>
+{
+    var veiculo = veiculoService.BuscaPorId(id);
+
+    if (veiculo == null)
+        return Results.NotFound();
+
+    veiculo.Marca = veiculoDTO.Marca;
+    veiculo.Modelo = veiculoDTO.Modelo;
+    veiculo.Ano = veiculoDTO.Ano;
+    veiculoService.Atualizar(veiculo);
+
+    return Results.Ok(veiculo);
+}).WithTags("Veículos");
+
+app.MapDelete("/veiculos/{id}", ([FromRoute] int id, IVeiculoService veiculoService) =>
+{
+    var veiculo = veiculoService.BuscaPorId(id);
+
+    if (veiculo == null)
+        return Results.NotFound();
+
+    veiculoService.Apagar(veiculo);
+
+    return Results.NoContent();
+}).WithTags("Veículos");
+#endregion
+
+#region App
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.Run();
+#endregion

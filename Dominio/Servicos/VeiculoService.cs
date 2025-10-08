@@ -36,7 +36,7 @@ namespace ProjetoFinalMinimalAPI.Dominio.Servicos
             _contexto.SaveChanges();
         }
 
-        public List<Veiculo> ListaTodos(int pagina = 1, string? marca = null, string? modelo = null)
+        public List<Veiculo> ListaTodos(int? pagina = 1, string? marca = null, string? modelo = null)
         {
             var query = _contexto.Veiculos.AsQueryable();
             if (!string.IsNullOrEmpty(marca))
@@ -46,8 +46,8 @@ namespace ProjetoFinalMinimalAPI.Dominio.Servicos
             }
 
             int itensPorPagina = 10;
-
-            query = query.Skip((pagina - 1) * itensPorPagina).Take(itensPorPagina);
+            if (pagina != null)
+                query = query.Skip(((int)pagina - 1) * itensPorPagina).Take(itensPorPagina);
 
             return query.ToList();
         }
