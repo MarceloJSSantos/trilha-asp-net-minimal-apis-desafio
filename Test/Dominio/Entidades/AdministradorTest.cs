@@ -17,7 +17,7 @@ namespace Test.Dominio.Entidades
 
         // --- Testes de Construtor e Propriedades ---
         [TestMethod]
-        public void Administrador_DeveSerInstanciadoComSucesso()
+        public void AdministradorDeveSerInstanciadoComSucesso()
         {
             // Arrange & Act
             var administrador = new Administrador();
@@ -32,7 +32,7 @@ namespace Test.Dominio.Entidades
         }
 
         [TestMethod]
-        public void Administrador_PropriedadesDevemFuncionar()
+        public void AdministradorPropriedadesDevemFuncionar()
         {
             // Arrange
             int idEsperado = 1;
@@ -58,7 +58,7 @@ namespace Test.Dominio.Entidades
 
         // --- Testes de Data Annotations (Validação) ---
         [TestMethod]
-        public void Administrador_ModeloValido_NaoDeveGerarErros()
+        public void AdministradorModeloValidoNaoDeveGerarErros()
         {
             // Arrange
             var administrador = new Administrador
@@ -79,7 +79,7 @@ namespace Test.Dominio.Entidades
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
-        public void Administrador_EmailObrigatorio_DeveGerarErroSeNullOuVazio(string email)
+        public void AdministradorEmailObrigatorioDeveGerarErroSeNullOuVazio(string email)
         {
             // Arrange
             var administrador = new Administrador
@@ -100,7 +100,7 @@ namespace Test.Dominio.Entidades
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
-        public void Administrador_SenhaObrigatoria_DeveGerarErroSeNullOuVazio(string senha)
+        public void AdministradorSenhaObrigatoriaDeveGerarErroSeNullOuVazio(string senha)
         {
             // Arrange
             var administrador = new Administrador
@@ -121,7 +121,7 @@ namespace Test.Dominio.Entidades
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
-        public void Administrador_PerfilObrigatorio_DeveGerarErroSeNullOuVazio(string perfil)
+        public void AdministradorPerfilObrigatorioDeveGerarErroSeNullOuVazio(string perfil)
         {
             // Arrange
             var administrador = new Administrador
@@ -142,7 +142,7 @@ namespace Test.Dominio.Entidades
         // --- Testes de Validação [StringLength] ---
 
         [TestMethod]
-        public void Administrador_EmailMaximo255_DeveGerarErroSeMuitoLongo()
+        public void AdministradorEmailMaximo255DeveGerarErroSeMuitoLongo()
         {
             // Arrange
             // 255 é o máximo permitido. 256 excede o limite.
@@ -162,7 +162,7 @@ namespace Test.Dominio.Entidades
         }
 
         [TestMethod]
-        public void Administrador_SenhaMaximo50_DeveGerarErroSeMuitoLongo()
+        public void AdministradorSenhaMaximo50DeveGerarErroSeMuitoLongo()
         {
             // Arrange
             // 50 é o máximo permitido. 51 excede o limite.
@@ -182,7 +182,7 @@ namespace Test.Dominio.Entidades
         }
 
         [TestMethod]
-        public void Administrador_PerfilMaximo10_DeveGerarErroSeMuitoLongo()
+        public void AdministradorPerfilMaximo10DeveGerarErroSeMuitoLongo()
         {
             // Arrange
             // 10 é o máximo permitido. 11 excede o limite.

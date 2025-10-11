@@ -12,6 +12,12 @@ public class DbContexto : DbContext
         _configuracaoAppSetting = configuracaoAppSetting;
     }
 
+    //Construtor criado para os testes de persistência
+    public DbContexto(DbContextOptions<DbContexto> options) : base(options)
+    {
+
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Administrador>().HasData(
