@@ -5,14 +5,6 @@ namespace ProjetoFinalMinimalAPI.Infraestrutura.Db;
 
 public class DbContexto : DbContext
 {
-    private readonly IConfiguration _configuracaoAppSetting;
-
-    public DbContexto(IConfiguration configuracaoAppSetting)
-    {
-        _configuracaoAppSetting = configuracaoAppSetting;
-    }
-
-    //Construtor criado para os testes de persistência
     public DbContexto(DbContextOptions<DbContexto> options) : base(options)
     {
 
@@ -35,18 +27,4 @@ public class DbContexto : DbContext
 
     public DbSet<Veiculo> Veiculos { get; set; } = default!;
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            var stringConexao = _configuracaoAppSetting.GetConnectionString("MySql")?.ToString();
-            if (!string.IsNullOrEmpty(stringConexao))
-            {
-                optionsBuilder.UseMySql(
-                    stringConexao,
-                    ServerVersion.AutoDetect(stringConexao)
-                );
-            }
-        }
-    }
 }
